@@ -68,7 +68,13 @@ const LeaveDetails = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <div className="rounded-md border border-slate-200 bg-slate-50 px-4 py-3">
+        <p className="text-sm text-slate-700">
+          Enter the requested leave period. End date must be after start date and within 12 months.
+        </p>
+      </div>
+
         <DatePicker 
           label='Start Date'
           error={errors.leaveStartDate?.message}

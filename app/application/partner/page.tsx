@@ -7,10 +7,13 @@ import Button from '@/app/components/ui/button';
 import Input from '@/app/components/ui/input';
 import Checkbox from '@/app/components/ui/checkbox';
 import RadioButton from '@/app/components/ui/radioButton';
+import { useRouter } from 'next/navigation';
+
 
 type PartnerForm = Pick<ApplicationForm, 'hasPartner' | 'partner'>;
 
 const PartnerDetails = () => {
+  const router = useRouter();
   const {
     register,
     watch,
@@ -53,12 +56,20 @@ const PartnerDetails = () => {
     }
 
     console.log(result.data);
+    router.push('/application/leave')
   };
 
   const checked = !!watch('hasPartner');
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <div className="mb-5 text-2xl font-semibold text-slate-700">Step 3</div>
+      <div className="rounded-md border border-slate-200 bg-slate-50 px-4 py-3">
+        <p className="text-sm text-slate-700">
+          Declare partner information only if the applicant has a registered partner.
+        </p>
+      </div>
+
       <Checkbox
         label="I have a partner"
         error={errors.hasPartner?.message}
@@ -66,7 +77,7 @@ const PartnerDetails = () => {
       />
 
       {checked && (
-        <div>
+        <div className="space-y-5 rounded-md border border-slate-200 bg-slate-50 p-4">
           <Input
             label="Partner Full Name"
             placeholder="Partner Full Name"

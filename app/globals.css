@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+:root {
+  --gov-navy-950: #0b2137;
+  --gov-navy-900: #12365a;
+  --gov-navy-700: #25558a;
+  --gov-sand-100: #f5f6f3;
+  --gov-sand-200: #e9ebe5;
+  --gov-danger-700: #b42318;
+}
+
+body {
+  background:
+    linear-gradient(180deg, #f1f4f8 0%, #eef2f6 35%, #e9edf2 100%);
+  font-family: "Source Sans Pro", "Noto Sans", "Segoe UI", sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Merriweather", "Times New Roman", serif;
+}
+

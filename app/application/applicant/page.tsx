@@ -3,10 +3,13 @@
 import { SubmitHandler, useFormContext } from 'react-hook-form';
 import { ApplicantForm } from '@/app/lib/types';
 import { applicantSchema } from '@/app/lib/schemas';
+import { useRouter } from 'next/navigation';
 import Input from '@/app/components/ui/input';
 import Button from '@/app/components/ui/button';
 
+
 const ApplicationInformation = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -37,11 +40,18 @@ const ApplicationInformation = () => {
     }
 
     console.log('valid applicant step', result.data);
-    // router.push('/application/employment')
+    router.push('/application/employment')
   };
   
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <div className="mb-5 text-2xl font-semibold text-slate-700">Step 1</div>
+      <div className="rounded-md border border-slate-200 bg-slate-50 px-4 py-3">
+        <p className="text-sm text-slate-700">
+          Enter the applicant details exactly as they appear in official records.
+        </p>
+      </div>
+
       <Input
         label="Full name"
         placeholder="Full name"
