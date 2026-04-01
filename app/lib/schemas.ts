@@ -1,9 +1,5 @@
-'use client'
-
-import { FormProvider, useForm } from 'react-hook-form'
-import { ApplicationForm } from '../lib/types';
 import { z } from "zod";
-import { zodResolver } from '@hookform/resolvers/zod';
+
 
 export const employmentTypeSchema = z.enum([
   "Employed",
@@ -103,17 +99,3 @@ export const applicationFormSchema = z
       });
     }
   });;
-
-export default function ApplicationLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
-  const form = useForm<ApplicationForm>({
-    // mode: "onSubmit",
-    // reValidateMode: "onSubmit",
-    resolver: zodResolver(applicationFormSchema)
-  });
-  
-  return (
-    <FormProvider {...form}>
-      {children}
-    </FormProvider>
-  );
-}

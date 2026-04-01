@@ -1,5 +1,5 @@
 export interface ApplicationForm {
-  applicant: Applicant,
+  applicant: ApplicantForm,
   employmentType: "Employed" | "Self-employed" | "Unemployed"
   bankNumber: string,
   ledger: string,
@@ -9,9 +9,9 @@ export interface ApplicationForm {
   employmentRatio?: number,
   hasPartner: boolean,
   partner?: Partner,
-  leaveStartDate: Date,
-  leaveEndDate: Date,
-  leaveRatio: number,
+  leaveStartDate: string,
+  leaveEndDate: string,
+  leaveRatio: "25" | "50" | "75" | "100",
   documents: string[]
 }
 
@@ -21,7 +21,7 @@ interface Partner {
   employmentType: "Employed" | "Self-employed" | "Unemployed"
 }
 
-export interface Applicant {
+export interface ApplicantForm {
   fullName: string,
   kennitala: string,
   address: string,
@@ -30,16 +30,16 @@ export interface Applicant {
 }
 
 export const employmentOptions = [
-    {
-      id: 'Employed',
-      name: 'employment',
-    },
-    {
-      id: 'Self-employed',
-      name: 'employment',
-    },
-    {
-      id: 'Unemployed',
-      name: 'employment',
-    },
-  ];
+  {
+    id: 'Employed',
+    name: 'employment',
+  },
+  {
+    id: 'Self-employed',
+    name: 'employment',
+  },
+  {
+    id: 'Unemployed',
+    name: 'employment',
+  },
+];

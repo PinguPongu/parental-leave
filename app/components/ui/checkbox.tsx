@@ -1,9 +1,9 @@
-type InputProps = {
+type CheckboxProps = {
   label?: string;
   error?: string;
 } 
 
-const Checkbox = ({ label, error, ...props }: InputProps) => {
+const Checkbox = ({ label, error, ...props }: CheckboxProps) => {
   return (
     <div className="flex gap-10">
       <label>

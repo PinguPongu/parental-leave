@@ -2,7 +2,7 @@
 
 import { SubmitHandler, useFormContext } from 'react-hook-form';
 import Input from '@/app/components/ui/input';
-import { ApplicationForm } from '@/app/lib/types';
+import { ApplicantForm } from '@/app/lib/types';
 import Button from '@/app/components/ui/button';
 
 const ApplicationInformation = () => {
@@ -10,9 +10,9 @@ const ApplicationInformation = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useFormContext<ApplicationForm>();
+  } = useFormContext<ApplicantForm>();
 
-  const onSubmit: SubmitHandler<ApplicationForm> = (data) => {
+  const onSubmit: SubmitHandler<ApplicantForm> = (data) => {
     console.log(data);
   };
 
@@ -21,36 +21,36 @@ const ApplicationInformation = () => {
       <Input
         label="Full name"
         placeholder="Full name"
-        error={errors.applicant?.fullName?.message}
-        {...register('applicant.fullName')}
+        error={errors.fullName?.message}
+        {...register('fullName')}
       />
 
       <Input
         label="Kennitala"
         placeholder="Kennitala"
-        error={errors.applicant?.kennitala?.message}
-        {...register('applicant.kennitala')}
+        error={errors.kennitala?.message}
+        {...register('kennitala')}
       />
 
       <Input
         label="Address"
         placeholder="Address"
-        error={errors.applicant?.address?.message}
-        {...register('applicant.address')}
+        error={errors.address?.message}
+        {...register('address')}
       />
 
       <Input
         label="Email"
         placeholder="Email"
-        error={errors.applicant?.email?.message}
-        {...register('applicant.email')}
+        error={errors.email?.message}
+        {...register('email')}
       />
 
       <Input
         label="Phone number"
         placeholder="Phone number"
-        error={errors.applicant?.phoneNumber?.message}
-        {...register('applicant.phoneNumber')}
+        error={errors.phoneNumber?.message}
+        {...register('phoneNumber')}
       />
 
       <Button variant='primary' label={isSubmitting ? 'Submitting...' : 'Next Step'} />

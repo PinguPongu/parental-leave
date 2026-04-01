@@ -8,7 +8,7 @@ import Checkbox from '@/app/components/ui/checkbox';
 import RadioButton from '@/app/components/ui/radioButton';
 
 
-type EmploymentForm = Pick<ApplicationForm, 'hasPartner' | 'partner'>;
+type PartnerForm = Pick<ApplicationForm, 'hasPartner' | 'partner'>;
 
 const PartnerDetails = () => {
   const {
@@ -16,9 +16,9 @@ const PartnerDetails = () => {
     watch,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useFormContext<EmploymentForm>();
+  } = useFormContext<PartnerForm>();
   
-  const onSubmit: SubmitHandler<EmploymentForm> = (data) => {
+  const onSubmit: SubmitHandler<PartnerForm> = (data) => {
     console.log(data);
   };
   
