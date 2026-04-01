@@ -2,11 +2,11 @@
 
 import { SubmitHandler, useFormContext } from 'react-hook-form';
 import { ApplicationForm, employmentOptions } from '@/app/lib/types';
+import { partnerStepSchema } from '@/app/lib/schemas';
 import Button from '@/app/components/ui/button';
 import Input from '@/app/components/ui/input';
 import Checkbox from '@/app/components/ui/checkbox';
 import RadioButton from '@/app/components/ui/radioButton';
-
 
 type PartnerForm = Pick<ApplicationForm, 'hasPartner' | 'partner'>;
 
@@ -15,14 +15,47 @@ const PartnerDetails = () => {
     register,
     watch,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useFormContext<PartnerForm>();
-  
+
   const onSubmit: SubmitHandler<PartnerForm> = (data) => {
-    console.log(data);
+    clearErrors();
+
+    const result = partnerStepSchema.safeParse(data);
+
+    if (!result.success) {
+      result.error.issues.forEach((issue) => {
+        const path = issue.path.join('.');
+
+        if (path === 'hasPartner') {
+          setError('hasPartner', { message: issue.message });
+        }
+
+        if (path === 'partner') {
+          setError('partner', { message: issue.message });
+        }
+
+        if (path === 'partner.fullName') {
+          setError('partner.fullName', { message: issue.message });
+        }
+
+        if (path === 'partner.kennitala') {
+          setError('partner.kennitala', { message: issue.message });
+        }
+
+        if (path === 'partner.employmentType') {
+          setError('partner.employmentType', { message: issue.message });
+        }
+      });
+      return;
+    }
+
+    console.log(result.data);
   };
-  
-  const checked: boolean = watch('hasPartner');
+
+  const checked = !!watch('hasPartner');
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -31,7 +64,8 @@ const PartnerDetails = () => {
         error={errors.hasPartner?.message}
         {...register('hasPartner')}
       />
-      {checked && 
+
+      {checked && (
         <div>
           <Input
             label="Partner Full Name"
@@ -45,17 +79,18 @@ const PartnerDetails = () => {
             error={errors.partner?.kennitala?.message}
             {...register('partner.kennitala')}
           />
-          <RadioButton 
+          <RadioButton
             radioInfos={employmentOptions}
+            title='Partner Employment'
             error={errors.partner?.employmentType?.message}
             {...register('partner.employmentType')}
           />
         </div>
-      }
-      <Button variant="primary" label={isSubmitting ? "Submitting..." : "Proceed"} />
+      )}
+
+      <Button variant="primary" label={isSubmitting ? 'Submitting...' : 'Proceed'} />
     </form>
   );
 };
 
 export default PartnerDetails;
-

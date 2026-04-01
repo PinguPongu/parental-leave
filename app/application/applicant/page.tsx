@@ -1,21 +1,45 @@
 'use client';
 
 import { SubmitHandler, useFormContext } from 'react-hook-form';
-import Input from '@/app/components/ui/input';
 import { ApplicantForm } from '@/app/lib/types';
+import { applicantSchema } from '@/app/lib/schemas';
+import Input from '@/app/components/ui/input';
 import Button from '@/app/components/ui/button';
 
 const ApplicationInformation = () => {
   const {
     register,
     handleSubmit,
+    clearErrors,
+    setError,
     formState: { errors, isSubmitting },
   } = useFormContext<ApplicantForm>();
 
   const onSubmit: SubmitHandler<ApplicantForm> = (data) => {
-    console.log(data);
-  };
+    clearErrors();
+    const result = applicantSchema.safeParse(data);
 
+    if (!result.success) {
+      result.error.issues.forEach((issue) => {
+        const field = issue.path[0];
+
+        if (
+          field === 'fullName' ||
+          field === 'kennitala' ||
+          field === 'address' ||
+          field === 'email' ||
+          field === 'phoneNumber'
+        ) {
+          setError(field, { message: issue.message });
+        }
+      });
+      return;
+    }
+
+    console.log('valid applicant step', result.data);
+    // router.push('/application/employment')
+  };
+  
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Input

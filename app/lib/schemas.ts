@@ -45,6 +45,40 @@ export const applicationFormSchema = z
     documents: z.array(z.string()),
   })
   .superRefine((data, ctx) => {
+    // date validations
+    const start = new Date(data.leaveStartDate)
+    const end = new Date(data.leaveEndDate)
+    
+    // end date cant be before start
+    if (end <= start) {
+        ctx.addIssue({
+        code: "custom",
+        path: ["leaveEndDate"],
+        message: "End date must be after start date",
+      });
+    }
+
+    // max 12 month durations
+    const maxLeave = new Date(start);
+    maxLeave.setMonth(maxLeave.getMonth() + 12);
+
+    if (end > maxLeave){
+        ctx.addIssue({
+        code: "custom",
+        path: ["leaveEndDate"],
+        message: "Max leave can't exceed 12 months.",
+      });
+    }
+  });
+
+export const employmentStepSchema = z
+  .object({
+    employmentType: employmentTypeSchema,
+    employerName: z.string().optional(),
+    employmentRatio: z.number().min(1).max(100).optional(),
+    companyName: z.string().optional()
+  })
+  .superRefine((data, ctx) => {
     // make the employed fields necessary
     if (data.employmentType === "Employed") {
       if (!data.employerName?.trim()) {
@@ -73,12 +107,50 @@ export const applicationFormSchema = z
         });
       }
     }
+  });
 
+export const partnerStepSchema = z
+  .object({
+    hasPartner: z.boolean(),
+    partner: partnerSchema.optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.hasPartner && !data.partner) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["partner"],
+        message: "Partner details are required",
+      });
+      return;
+    }
+
+    if (data.hasPartner && data.partner) {
+      const parsed = partnerSchema.safeParse(data.partner);
+      if (!parsed.success) {
+        parsed.error.issues.forEach((issue) => {
+          ctx.addIssue({
+            code: "custom",
+            path: ["partner", ...issue.path],
+            message: issue.message,
+          });
+        });
+      }
+    }
+  });
+
+export const dateStepSchema = z
+  .object({
+    leaveStartDate: z.string().min(1, "Start date is required"),
+    leaveEndDate: z.string().min(1, "End date is required"),
+    leaveRatio: z.enum(["25", "50", "75", "100"]),
+  })
+  .superRefine((data, ctx) => {
     // date validations
     const start = new Date(data.leaveStartDate)
     const end = new Date(data.leaveEndDate)
     
     // end date cant be before start
+    console.log(end >= start);
     if (end <= start) {
         ctx.addIssue({
         code: "custom",
@@ -98,4 +170,4 @@ export const applicationFormSchema = z
         message: "Max leave can't exceed 12 months.",
       });
     }
-  });;
+  })

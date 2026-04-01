@@ -6,13 +6,15 @@ type RadioButtonInfo = {
 
 type RadioButtonProps = {
   radioInfos: RadioButtonInfo[]
+  title: string,
   error?: string;
 } 
 
-const RadioButton = ({ radioInfos, error, ...props }: RadioButtonProps) => {
+const RadioButton = ({ radioInfos, error, title, ...props }: RadioButtonProps) => {
   
   return (
     <div className="flex gap-10">
+      <div>{title}</div>
       {radioInfos.map((radioInfo, index) => (
         <div key={radioInfo.id}>
           <input

@@ -5,6 +5,7 @@ import { ApplicationForm } from '@/app/lib/types';
 import Button from '@/app/components/ui/button';
 import RadioButton from '@/app/components/ui/radioButton';
 import DatePicker from '@/app/components/ui/datePicker';
+import { dateStepSchema } from '@/app/lib/schemas';
 
 
 type LeaveForm = Pick<ApplicationForm, 'leaveStartDate' | 'leaveEndDate' | 'leaveRatio'>;
@@ -33,16 +34,37 @@ const leaveRatioOptions = [
 ];
 
 
-const PartnerDetails = () => {
+const LeaveDetails = () => {
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useFormContext<LeaveForm>();
   
   const onSubmit: SubmitHandler<LeaveForm> = (data) => {
-    console.log(data);
-    console.log("wtf");
+    clearErrors();
+
+    const result = dateStepSchema.safeParse(data);
+
+    if (!result.success) {
+      result.error.issues.forEach((issue) => {
+        const field = issue.path[0];
+
+        if (
+          field === 'leaveStartDate' ||
+          field === 'leaveEndDate' ||
+          field === 'leaveRatio'
+        ) {
+          setError(field, { message: issue.message });
+        }
+      });
+
+      return;
+    }
+
+    console.log(result.data);
   };
 
   return (
@@ -59,6 +81,7 @@ const PartnerDetails = () => {
         />
         <RadioButton 
             radioInfos={leaveRatioOptions}
+            title='Leave Ratio'
             error={errors.leaveRatio?.message}
             {...register('leaveRatio')}
         />
@@ -67,5 +90,4 @@ const PartnerDetails = () => {
   );
 };
 
-export default PartnerDetails;
-
+export default LeaveDetails;

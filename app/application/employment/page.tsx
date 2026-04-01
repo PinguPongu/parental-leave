@@ -5,6 +5,7 @@ import RadioButton from '@/app/components/ui/radioButton';
 import { ApplicationForm, employmentOptions } from '@/app/lib/types';
 import Button from '@/app/components/ui/button';
 import Input from '@/app/components/ui/input';
+import { employmentStepSchema } from '@/app/lib/schemas';
 
 
 type EmploymentForm = Pick<ApplicationForm, 'employmentType' | 'employerName' | 'employmentRatio' | 'companyName'>;
@@ -13,12 +14,33 @@ const EmploymentDetails = () => {
   const {
     register,
     watch,
+    setError,
     handleSubmit,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useFormContext<EmploymentForm>();
   
   const onSubmit: SubmitHandler<EmploymentForm> = (data) => {
-    console.log(data);
+    clearErrors();
+    const result = employmentStepSchema.safeParse(data);
+
+    if (!result.success) {
+      result.error.issues.forEach((issue) => {
+        const field = issue.path[0];
+
+        if (
+          field === 'employmentType' ||
+          field === 'employerName' ||
+          field === 'employmentRatio' ||
+          field === 'companyName'
+        ) {
+          setError(field, { message: issue.message });
+        }
+      });
+      return;
+    }
+
+    console.log(result.data);
   };
   
   const selectedEmploymentType = watch('employmentType');
@@ -38,7 +60,7 @@ const EmploymentDetails = () => {
           placeholder="Employement Ratio"
           error={errors.employmentRatio?.message}
           type='number'
-          {...register('employmentRatio')}
+          {...register('employmentRatio', { valueAsNumber: true })}
         />
       </div>
     )
@@ -57,6 +79,7 @@ const EmploymentDetails = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <RadioButton 
         radioInfos={employmentOptions}
+        title='Employment Status'
         error={errors.employmentType?.message}
         {...register('employmentType')}
       />
