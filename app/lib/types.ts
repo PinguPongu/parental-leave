@@ -18,7 +18,7 @@ export interface ApplicationForm {
 interface Partner {
   fullName: string,
   kennitala: string,
-  employmentStatus: "Employed" | "Self-employed" | "Unemployed"
+  employmentType: "Employed" | "Self-employed" | "Unemployed"
 }
 
 export interface Applicant {
@@ -28,3 +28,18 @@ export interface Applicant {
   email: string,
   phoneNumber: string,
 }
+
+export const employmentOptions = [
+    {
+      id: 'Employed',
+      name: 'employment',
+    },
+    {
+      id: 'Self-employed',
+      name: 'employment',
+    },
+    {
+      id: 'Unemployed',
+      name: 'employment',
+    },
+  ];

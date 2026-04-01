@@ -1,11 +1,11 @@
 type InputProps = {
   label?: string;
-  type?: string;
   placeholder?: string;
   error?: string;
+  type?: string;
 } 
 
-const Input = ({ label, type = "text", placeholder, error, ...props }: InputProps) => {
+const Input = ({ label, type='text', placeholder, error, ...props }: InputProps) => {
   return (
     <div className="flex gap-10">
       <label>
